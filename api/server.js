@@ -2,7 +2,7 @@
 
 const express = require('express');
 const line = require('@line/bot-sdk');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const config = {
     channelSecret: '35237451855259812007dc1a5c9df4d1',
@@ -40,5 +40,7 @@ async function handleEvent(event) {
   });
 }
 
-app.listen(PORT);
+// app.listen(PORT);
+// console.log(`Server running at ${PORT}`);
+(process.env.NOW_REGION) ? module.exports = app : app.listen(PORT);
 console.log(`Server running at ${PORT}`);
