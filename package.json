@@ -1,7 +1,6 @@
 {
   "name": "DisasterCert",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,5 +11,15 @@
   "dependencies": {
     "@line/bot-sdk": "^7.2.0",
     "express": "^4.17.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Takao-Yamasaki/DisasterCert.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Takao-Yamasaki/DisasterCert/issues"
+  },
+  "homepage": "https://github.com/Takao-Yamasaki/DisasterCert#readme",
+  "description": ""
 }
