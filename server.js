@@ -39,7 +39,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: userName + "、こんにちは！り災証明申請アプリです。\nあなたの氏名を入力してください。"
+                    text: userName + "、こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
                 }));
             }
         }
