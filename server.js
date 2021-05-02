@@ -28,7 +28,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
     let events_processed = [];
 
-    // 氏名の入力。
+    // 氏名の入力
     req.body.events.forEach((event) => {
         //ユーザー名を変数に格納
         // let userName = res.body.displayName;
@@ -42,24 +42,16 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     text: "こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
                 }));
                 // 住所の入力
-                if (event.type == "message" && event.message.type == "text"){
-                    events_processed.push(bot.replyMessage(event.replyToken, {
-                        type: "text",
-                        text: "住所を入力してください。"
-                    }));
+                if (event.type == "message" && event.message.type == "text") {
+                    req.body.events.forEach((event) => {
+                        events_processed.push(bot.replyMessage(event.repllyToken, {
+                            type: "text",
+                            text: "住所を入力してください。"
+                        }));
+                    });
                 }
             }
         }
-    });
-
-   
-
-    // り災物件の入力
-    req.body.events.forEach((event) => {
-        events_processed.push(bot.replyMessage(event.repllyToken, {
-            type: "text",
-            text: "り災物件を入力してください。"
-        }));
     });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
