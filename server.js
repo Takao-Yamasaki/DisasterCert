@@ -44,6 +44,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: "り災証明の申請を開始するには、「こんにちは」と入力してください。"
                 }));
+                break;
             }
         }
     });
