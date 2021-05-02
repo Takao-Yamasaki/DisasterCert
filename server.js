@@ -41,17 +41,18 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: "こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
                 }));
+                // 住所の入力
+                if (event.type == "message" && event.message.type == "text"){
+                    events_processed.push(bot.replyMessage(event.replyToken, {
+                        type: "text",
+                        text: "住所を入力してください。"
+                    }));
+                }
             }
         }
     });
 
-    // 住所の入力
-    req.body.events.forEach((event) => {
-        events_processed.push(bot.replyMessage(event.replyToken, {
-            type: "text",
-            text: "あなたの住所を入力してください。"
-        }));
-    });
+   
 
     // り災物件の入力
     req.body.events.forEach((event) => {
