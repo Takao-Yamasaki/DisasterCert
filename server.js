@@ -30,8 +30,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // 氏名の入力
     req.body.events.forEach((event) => {
-        //ユーザー名を変数に格納
-        // let userName = res.body.displayName;
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
@@ -41,19 +39,19 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: "こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
                 }));
-                // 住所の入力
-                if (event.type == "message" && event.message.type == "text") {
-                    req.body.events.forEach((event) => {
-                        events_processed.push(bot.replyMessage(event.repllyToken, {
-                            type: "text",
-                            text: "住所を入力してください。"
-                        }));
-                    });
-                }
+            } else {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "り災証明の申請を開始するには、「こんにちは」と入力してください。"
+                }));
             }
         }
     });
 
+    req.body.events.forEach((event) => {
+
+    })
+    
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
