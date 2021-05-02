@@ -31,7 +31,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
         //ユーザー名を変数に格納
-        let userName = res.body.displayName;
+        // let userName = res.body.displayName;
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
@@ -39,7 +39,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: userName + "、こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
+                    text: "こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
                 }));
             }
         }
