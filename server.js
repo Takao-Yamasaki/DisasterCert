@@ -34,7 +34,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var userId = event.source.userId;
         // ユーザの情報を変数に格納
         var storage = {
-            userId:{stage: 0, name: null, address: null}
+            userId:{stage: 1, name: null, address: null}
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
