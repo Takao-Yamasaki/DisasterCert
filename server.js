@@ -29,17 +29,19 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
 
+    var storage = sessionStorage;
+
     req.body.events.forEach((event) => {
         // ユーザーIDの取得
         var userId = event.source.userId;
         // ユーザの情報を変数に格納
-        var storage = {
-            userId:{stage: 6, name: null, address: null}
+        var userData = {
+            userId:{stage: 0, name: null, address: null, housing: null, date: null, place: null, picture: null}
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            if (storage.userId.stage == 0){
+            if (userData.userId.stage == 0){
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
@@ -49,38 +51,54 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: "あなたの「氏名」を入力してください。" 
                 }));
-                storage.userId.stage = 1;
-            } else if(storage.userId.stage == 1) {
+                
+                userData.userId.name = event.message.text
+                userData.userId.stage = 1;
+                storage.setItem('userData',JSON.stringify(userData));
+                var getData = JSON.parse(storage.getItem('userId'));
+                
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: getData['name'] 
+                }));
+                
+            } else if(userData.userId.stage == 1) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "あなたの「住所」を入力してください。"
                 }));
-                storage.userId.stage = 2;
-            } else if(storage.userId.stage == 2) {
+                userData.userId.stage = 2;
+            } else if(userData.userId.stage == 2) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した物件」を入力してください・"
                 }));
-                storage.userId.stage = 3;
-            } else if(storage.userId.stage == 3) {
+                userData.userId.stage = 3;
+            } else if(userData.userId.stage == 3) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した年月日」を入力してください。"
                 }));
-                storage.userId.stage = 4;
-            } else if(storage.userId.stage == 4) {
+                userData.userId.stage = 4;
+            } else if(userData.userId.stage == 4) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した物件の所在」を入力してください。"
                 }));
-                storage.userId.stage = 5;
-            } else if(storage.userId.stage == 5) {
+                userData.userId.stage = 5;
+            } else if(userData.userId.stage == 5) {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "「り災の状況」を入力してください。"
+                }));
+                userData.userId.stage = 6;
+            } else if(userData.userId.stage == 6) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災の状況がわかる写真」を添付してください。"
                 }));
-                storage.userId.stage = 6;
-            } else if(storage.userId.stage == 6) {
+                userData.userId.stage = 7;
+            } else if(userData.userId.stage == 7) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "り災証明の申請が完了しました。\n申請内容を確認後、市役所の担当者よりご連絡します。\nしばらくお待ちください。"
