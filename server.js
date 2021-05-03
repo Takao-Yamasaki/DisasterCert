@@ -57,7 +57,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // }));
 
             } else if(storage.userId.stage == 1) {
-                var getData = JSON.parse(sessionStorage.getItem('storage'));
+                // var getData = JSON.parse(sessionStorage.getItem('storage'));
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "さんの「住所」を入力してください。"
