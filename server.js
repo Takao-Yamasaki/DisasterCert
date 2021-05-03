@@ -25,10 +25,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
-    // すべてのイベント処理のプロミスを格納する配列。
+    // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
 
-    // 氏名の入力
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
@@ -37,7 +36,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "こんにちは！り災証明申請アプリです。あなたの氏名を入力してください。"
+                    text: events.source.userId
                 }));
             } else {
                 events_processed.push(bot.replyMessage(event.replyToken, {
@@ -48,10 +47,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
     });
 
-    req.body.events.forEach((event) => {
-
-    })
-    
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
