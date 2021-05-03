@@ -34,7 +34,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var userId = event.source.userId;
         // ユーザの情報を変数に格納
         var storage = {
-            userId:{stage: 1, name: null, address: null}
+            userId:{stage: 6, name: null, address: null}
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
@@ -43,12 +43,37 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "あなたの氏名を入力してください" 
+                    text: "あなたの「氏名」を入力してください" 
                 }));
             } else if(storage.userId.stage == 1) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "あなたの住所を入力してください"
+                    text: "あなたの「住所」を入力してください"
+                }));
+            } else if(storage.userId.stage == 2) {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "「り災した物件」を入力してください"
+                }));
+            } else if(storage.userId.stage == 3) {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "「り災した年月日」を入力してください"
+                }));
+            } else if(storage.userId.stage == 4) {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "「り災した物件の所在」を入力してください"
+                }));
+            } else if(storage.userId.stage == 5) {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "「り災の状況がわかる写真」を添付してください"
+                }));
+            } else if(storage.userId.stage == 6) {
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "り災証明書の申請が完了しました。審査が完了した後、市役所よりご連絡します。しばらくお待ちください。"
                 }));
             }
         }
