@@ -41,10 +41,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
             if (event.message.text == "こんにちは"){
                 switch (storage.userId.stage) {
-                    case 0:
+                    case "0":
                         events_processed.push(bot.replyMessage(event.replyToken, {
                             type: "text",
-                            text: "氏名を入力してください。"
+                            text: "氏名を入力してください"
                         }));
                         storage.userId.name = event.message.text;
                         event.message.stage = 1;
