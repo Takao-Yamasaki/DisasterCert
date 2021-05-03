@@ -28,7 +28,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
 
-    let userId = event.source.userId;
+    // let userId = event.source.userId;
 
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
