@@ -49,19 +49,22 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 storage.userId.name = event.message.text;
                 storage.userId.stage = 1;
                 sessionStorage.setItem('storage',JSON.stringify(storage));
-                var getData = JSON.parse(sessionStorage.getItem('storage'));
+                // var getData = JSON.parse(sessionStorage.getItem('storage'));
                 
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: getData['name'] 
-                }));
+                // events_processed.push(bot.replyMessage(event.replyToken, {
+                //     type: "text",
+                //     text: getData['name'] 
+                // }));
 
             } else if(storage.userId.stage == 1) {
+                var getData = JSON.parse(sessionStorage.getItem('storage'));
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "あなたの「住所」を入力してください。"
+                    text: getData['name'] + "さんの「住所」を入力してください。"
                 }));
+                }
                 storage.userId.stage = 2;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
             } else if(storage.userId.stage == 2) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
