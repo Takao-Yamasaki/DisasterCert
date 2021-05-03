@@ -43,13 +43,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "ようこそ！\nり災証明申請アプリです。\nり災証明の申請を開始します。" 
+                    text: "ようこそ！\nり災証明申請アプリです。\nあなたの「氏名」を入力してください。" 
                 }));
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: "あなたの「氏名」を入力してください。" 
-                }));
-                
+                                
                 // storage.userId.name = event.message.text;
                 // storage.userId.stage = 1;
                 // sessionStorage.setItem('storage',JSON.stringify(storage));
