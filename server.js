@@ -28,7 +28,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
 
-    let userId = event.events.source.userId;
+    let userId = event.source.userId;
 
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
@@ -38,7 +38,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "${userId}"
+                    text: "ユーザーID：${userId}"
                 }));
             } else {
                 events_processed.push(bot.replyMessage(event.replyToken, {
