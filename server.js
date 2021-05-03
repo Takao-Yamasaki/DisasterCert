@@ -49,41 +49,66 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     {
                         type: "text",
                         text: "あなたの「氏名」を入力してください。"
-                    }]));    
+                    }])); 
+                    storage.userId.stage = 1;  
                     storage.userId.name = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
+
                 } else if(storage.userId.stage == 1) {
                     var getData = JSON.parse(sessionStorage.getItem('storage'));
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "${getData['name']}さんの「住所」を入力してください。"
                     }));
+                    storage.userId.stage = 2;
+                    storage.userId.address = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
+
                 } else if(storage.userId.stage == 2) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災した物件」を入力してください・"
                     }));
+                    storage.userId.stage = 3;
+                    storage.userId.address = event.message.text;
+                    sessionStorage.setItem('storage',JSON.stringify(storage));
+
                 } else if(storage.userId.stage == 3) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災した年月日」を入力してください。"
                     }));
+                    storage.userId.stage = 4;
+                    storage.userId.address = event.message.text;
+                    sessionStorage.setItem('storage',JSON.stringify(storage));
+
                 } else if(storage.userId.stage == 4) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災した物件の所在」を入力してください。"
                     }));
+                    storage.userId.stage = 5;
+                    storage.userId.address = event.message.text;
+                    sessionStorage.setItem('storage',JSON.stringify(storage));
+
                 } else if(storage.userId.stage == 5) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災の状況」を入力してください。"
                     }));
+                    storage.userId.stage = 6;
+                    storage.userId.address = event.message.text;
+                    sessionStorage.setItem('storage',JSON.stringify(storage));
+
                 } else if(storage.userId.stage == 6) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災の状況がわかる写真」を添付してください。"
                     }));
+                    storage.userId.stage = 7;
+                    storage.userId.address = event.message.text;
+                    sessionStorage.setItem('storage',JSON.stringify(storage));
+                
                 } else if(storage.userId.stage == 7) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
@@ -91,8 +116,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }));
                 }
             }
-            // カウンタ
-            storage.userId.stage += 1;
         }        
     });
 
