@@ -28,9 +28,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
 
-    // let userId = event.source.userId;
-
     req.body.events.forEach((event) => {
+        // ユーザーIDの取得
+        var userId = event.source.userId;
+        // ユーザの情報を変数に格納
+        var storage = {
+            userId:{stage: 0, name: null, address: null}
+        };
+
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
@@ -38,7 +43,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: event.source.userId
+                    text: storage[userId][:stage]
                 }));
             } else {
                 events_processed.push(bot.replyMessage(event.replyToken, {
