@@ -43,41 +43,41 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "ようこそ！り災証明申請アプリです。申請を開始します。" 
+                    text: "ようこそ！り災証明申請アプリです。\nり災証明の申請を開始します。" 
                 }));
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "あなたの「氏名」を入力してください" 
+                    text: "あなたの「氏名」を入力してください。" 
                 }));
             } else if(storage.userId.stage == 1) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "あなたの「住所」を入力してください"
+                    text: "あなたの「住所」を入力してください。"
                 }));
             } else if(storage.userId.stage == 2) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "「り災した物件」を入力してください"
+                    text: "「り災した物件」を入力してください・"
                 }));
             } else if(storage.userId.stage == 3) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "「り災した年月日」を入力してください"
+                    text: "「り災した年月日」を入力してください。"
                 }));
             } else if(storage.userId.stage == 4) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "「り災した物件の所在」を入力してください"
+                    text: "「り災した物件の所在」を入力してください。"
                 }));
             } else if(storage.userId.stage == 5) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "「り災の状況がわかる写真」を添付してください"
+                    text: "「り災の状況がわかる写真」を添付してください。"
                 }));
             } else if(storage.userId.stage == 6) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "り災証明の申請が完了しました。\n内容を確認後、担当者よりご連絡します。\nしばらくお待ちください。"
+                    text: "り災証明の申請が完了しました。\n申請内容を確認後、市役所の担当者よりご連絡します。\nしばらくお待ちください。"
                 }));
             }
         }
