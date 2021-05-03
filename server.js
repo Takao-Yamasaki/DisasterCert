@@ -43,6 +43,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
+                    text: "ようこそ！り災証明申請アプリです。申請を開始します。" 
+                }));
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    type: "text",
                     text: "あなたの「氏名」を入力してください" 
                 }));
             } else if(storage.userId.stage == 1) {
@@ -73,7 +77,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             } else if(storage.userId.stage == 6) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "り災証明書の申請が完了しました。審査が完了した後、市役所よりご連絡します。しばらくお待ちください。"
+                    text: "り災証明の申請が完了しました。\n内容を確認後、担当者よりご連絡します。\nしばらくお待ちください。"
                 }));
             }
         }
