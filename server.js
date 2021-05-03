@@ -29,7 +29,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
     // セッションストレージを使用
-    // var storage = sessionStorage;
+    var storage = sessionStorage;
 
     req.body.events.forEach((event) => {
         // ユーザーIDの取得
@@ -45,7 +45,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "ようこそ！り災証明申請アプリです。\nり災証明の申請を開始します。" 
+                    text: "ようこそ！\nり災証明申請アプリです。\nり災証明の申請を開始します。" 
                 }));
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
