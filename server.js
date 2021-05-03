@@ -37,7 +37,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
         };
         
-        while (getData['stage'] <= 7) {
+        while (JSON.parse(storage.getItem('storage'))['stage'] <= 7) {
             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
             if (event.type == "message" && event.message.type == "text"){
                 if (storage.userId.stage == 0){
@@ -116,7 +116,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }));
                 }
             }
-            var getData = JSON.parse(storage.getItem('storage'));
         }        
     });
 
