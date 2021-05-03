@@ -34,10 +34,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var userId = event.source.userId;
         // ユーザの情報を変数に格納
         var storage = {
-            userId:{stage: 0, name: null, address: null, housing: null, date: null, place: null, picture: null}
+            userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
         };
         
-        while (storage.userId.stage <= 7) {
+        while (getData['stage'] <= 7) {
             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
             if (event.type == "message" && event.message.type == "text"){
                 if (storage.userId.stage == 0){
@@ -70,7 +70,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         text: "「り災した物件」を入力してください・"
                     }));
                     storage.userId.stage = 3;
-                    storage.userId.address = event.message.text;
+                    storage.userId.housing = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
                 } else if(storage.userId.stage == 3) {
@@ -79,7 +79,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         text: "「り災した年月日」を入力してください。"
                     }));
                     storage.userId.stage = 4;
-                    storage.userId.address = event.message.text;
+                    storage.userId.date = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
                 } else if(storage.userId.stage == 4) {
@@ -88,16 +88,16 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         text: "「り災した物件の所在」を入力してください。"
                     }));
                     storage.userId.stage = 5;
-                    storage.userId.address = event.message.text;
+                    storage.userId.location = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
                 } else if(storage.userId.stage == 5) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
-                        text: "「り災の状況」を入力してください。"
+                        text: "「り災の原因」を入力してください。"
                     }));
                     storage.userId.stage = 6;
-                    storage.userId.address = event.message.text;
+                    storage.userId.cause = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
                 } else if(storage.userId.stage == 6) {
@@ -106,7 +106,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         text: "「り災の状況がわかる写真」を添付してください。"
                     }));
                     storage.userId.stage = 7;
-                    storage.userId.address = event.message.text;
+                    storage.userId.picture = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
                 
                 } else if(storage.userId.stage == 7) {
@@ -116,6 +116,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }));
                 }
             }
+            var getData = JSON.parse(storage.getItem('storage'));
         }        
     });
 
