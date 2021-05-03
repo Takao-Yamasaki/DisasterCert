@@ -28,7 +28,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
-
+    // セッションストレージを使用
     var storage = sessionStorage;
 
     req.body.events.forEach((event) => {
@@ -52,7 +52,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     text: "あなたの「氏名」を入力してください。" 
                 }));
                 
-                userData.userId.name = event.message.text
+                userData.userId.name = event.message.text;
                 userData.userId.stage = 1;
                 storage.setItem('userData',JSON.stringify(userData));
                 var getData = JSON.parse(storage.getItem('userId'));
@@ -61,7 +61,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: getData['name'] 
                 }));
-                
+
             } else if(userData.userId.stage == 1) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
