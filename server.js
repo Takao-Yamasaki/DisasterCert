@@ -30,7 +30,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     let events_processed = [];
 
     
-    while (JSON.parse(storage.getItem('storage'))['stage'] <= 7) {
+    // while (JSON.parse(storage.getItem('storage'))['stage'] <= 7) {
         req.body.events.forEach((event) => {
             // ユーザーIDの取得
             var userId = event.source.userId;
@@ -119,7 +119,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                 }        
         });
-    }
+    // }
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
