@@ -2,6 +2,7 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+const { text } = require("express");
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -35,21 +36,42 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var storage = {
             userId:{stage: 0, name: null, address: null}
         };
-
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
             if (event.message.text == "こんにちは"){
+                switch (storage.userId.stage) {
+                    case 0:
+                        events_processed.push(bot.replyMessage(event.replyToken, {
+                            type: "text",
+                            text: "氏名を入力してください。"
+                        }));
+                        storage.userId.name = event.message.text;
+                        event.message.stage = 1;
+                        events_processed.push(bot.replyMessage(event.replyToken, {
+                            type: "text",
+                            text: storage.userId.name
+                        }));
+                        break;
+                    case 1:
+                        events_processed.push(bot.replyMessage(event.replyToken, {
+                            type: "text";
+                            text: "住所を入力してください"
+                        }));
+                        storage.userId.name = event.message.text;
+                        event.message.stage = 2;
+                        break;
+                }
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: storage.userId.stage
-                }));
-            } else {
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: "り災証明の申請を開始するには、「こんにちは」と入力してください。"
-                }));
+            //     events_processed.push(bot.replyMessage(event.replyToken, {
+            //         type: "text",
+            //         text: storage.userId.stage
+            //     }));
+            // } else {
+            //     events_processed.push(bot.replyMessage(event.replyToken, {
+            //         type: "text",
+            //         text: "り災証明の申請を開始するには、「こんにちは」と入力してください。"
+            //     }));
             }
         }
     });
