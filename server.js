@@ -49,31 +49,37 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: "あなたの「氏名」を入力してください。" 
                 }));
+                storage.userId.stage = 1;
             } else if(storage.userId.stage == 1) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "あなたの「住所」を入力してください。"
                 }));
+                storage.userId.stage = 2;
             } else if(storage.userId.stage == 2) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した物件」を入力してください・"
                 }));
+                storage.userId.stage = 3;
             } else if(storage.userId.stage == 3) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した年月日」を入力してください。"
                 }));
+                storage.userId.stage = 4;
             } else if(storage.userId.stage == 4) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した物件の所在」を入力してください。"
                 }));
+                storage.userId.stage = 5;
             } else if(storage.userId.stage == 5) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災の状況がわかる写真」を添付してください。"
                 }));
+                storage.userId.stage = 6;
             } else if(storage.userId.stage == 6) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
