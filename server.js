@@ -38,7 +38,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "ユーザーID：${userId}"
+                    text: "氏名を入力してください"
                 }));
             } else {
                 events_processed.push(bot.replyMessage(event.replyToken, {
