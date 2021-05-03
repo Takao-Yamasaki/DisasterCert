@@ -46,9 +46,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     text: "ようこそ！\nり災証明申請アプリです。\nあなたの「氏名」を入力してください。" 
                 }));
 
-                storage.userId.name = event.message.text;
-                storage.userId.stage = 1;
-                sessionStorage.setItem('storage',JSON.stringify(storage));
+                // storage.userId.name = event.message.text;
+                // storage.userId.stage = 1;
+                // sessionStorage.setItem('storage',JSON.stringify(storage));
                 // var getData = JSON.parse(sessionStorage.getItem('storage'));
                 
                 // events_processed.push(bot.replyMessage(event.replyToken, {
