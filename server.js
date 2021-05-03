@@ -41,10 +41,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
             if (storage.userId.stage == 0){
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, {
+                events_processed.push(bot.replyMessage(event.replyToken, [{
                     type: "text",
-                    text: "ようこそ！\nり災証明申請アプリです。\nあなたの「氏名」を入力してください。" 
-                }));
+                    text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
+                },
+                {
+                    type: "text",
+                    text: "あなたの「氏名」を入力してください。"
+                }]));
 
                 storage.userId.name = event.message.text;
                 storage.userId.stage = 1;
