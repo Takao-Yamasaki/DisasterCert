@@ -9,9 +9,9 @@ admin.initializeApp ({
     databaseURL: "https://disaster-cert-default-rtdb.firebaseio.com/"
 });
 
-// var db = admin.database();
-// var ref = db.ref("protoout/studio");
-// var userRef = ref.child("messageList");
+var db = admin.database();
+var ref = db.ref("protoout/studio");
+var userRef = ref.child("messageList");
 
 // -----------------------------------------------------------------------------
 // モジュールのインポート
@@ -64,9 +64,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     text: "あなたの「氏名」を入力してください。"
                 }])); 
                 // firebase
-                var database = firebase.database();
-                let room = "chat_room";
-                database.ref(room).push({
+                userRef.push({
                     use: userId,
                     name: event.message.text,
                     stage: 1
