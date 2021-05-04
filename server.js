@@ -76,10 +76,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             type: "text",
                             text: "あなたの「住所」を入力してください。" 
                         }));
-                        userRef.child(userId).update({
-                            stage: 2,
-                            name: events.message.text
-                        });
+                        // storage.userId.stage = 2;
+                        // userRef.child(userId).update({
+                        //     stage: 2,
+                        //     address: events.message.text
+                        // });
                         break;
                 }
             });
