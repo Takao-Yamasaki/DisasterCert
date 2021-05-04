@@ -53,10 +53,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            // userRef.child(userId).once('value',function(snapshot){
-            //     var userData = snapshot.val();
-            // });
-            // var stg = userData['stage'];
+            userRef.child(userId).once('value',function(snapshot){
+                var userData = snapshot.val();
+            });
+            var stg = userData['stage'];
             switch (storage.userId.stage) {
                 case 0:
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
@@ -66,7 +66,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     },
                     {
                         type: "text",
-                        text: "あなたの「氏名」を入力してください。"
+                        text: stg
                     }])); 
                     storage.userId.stage = 1;
                     userRef.child(userId).set({
