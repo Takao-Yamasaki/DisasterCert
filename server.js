@@ -64,9 +64,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         },
                         {
                             type: "text",
-                            text: userData['stage']
+                            text: "あなたの「氏名」を入力してください" + userData['stage']
                         }])); 
-                        // storage.userId.stage = 1;
                         userRef.child(userId).set({
                             stage: 1
                         });
@@ -74,7 +73,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     case 1: 
                         events_processed.push(bot.replyMessage(event.replyToken, {
                             type: "text",
-                            text: "あなたの住所を入力してください" + userData['stage'] 
+                            text: "あなたの「住所」を入力してください" + userData['stage'] 
                         }));
                         // storage.userId.stage = 2;
                         // userRef.child(userId).set({
