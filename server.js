@@ -56,7 +56,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
                 switch (userData['stage']) {
-                    case null:
+                    default:
                         // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                         events_processed.push(bot.replyMessage(event.replyToken, [{
                             type: "text",
@@ -64,7 +64,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         },
                         {
                             type: "text",
-                            text: "あなたの「氏名」を入力してください" + userData['stage']
+                            text: "あなたの「氏名」を入力してください"
                         }])); 
                         userRef.child(userId).set({
                             stage: 1
