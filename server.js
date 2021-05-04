@@ -54,7 +54,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).once('value',function(snapshot){
-                var stg = snapshot.val([stage])
+                var stg = snapshot.val().stage;
             });
             switch (stg) {
                 case null:
