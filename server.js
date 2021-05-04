@@ -3,6 +3,7 @@
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
 
+// SDKを初期化
 admin.initializeApp ({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://disaster-cert-default-rtdb.firebaseio.com/"
@@ -66,52 +67,76 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 var database = firebase.database();
                 let room = "chat_room";
                 database.ref(room).push({
-                    userId: userId,
+                    use: userId,
                     name: event.message.text,
                     stage: 1
                 });
+
+                torage.userId.stage = 1;  
+                storage.userId.name = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
 
             } else if(storage.userId.stage == 1) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "${getData['name']}さんの「住所」を入力してください。"
                 }));
+                storage.userId.stage = 2;
+                storage.userId.address = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
 
             } else if(storage.userId.stage == 2) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した物件」を入力してください・"
                 }));
+                storage.userId.stage = 3;
+                storage.userId.housing = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
 
             } else if(storage.userId.stage == 3) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した年月日」を入力してください。"
                 }));
+                storage.userId.stage = 4;
+                storage.userId.date = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
 
             } else if(storage.userId.stage == 4) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災した物件の所在」を入力してください。"
                 }));
+                storage.userId.stage = 5;
+                storage.userId.location = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
 
             } else if(storage.userId.stage == 5) {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災の原因」を入力してください。"
                 }));
+                storage.userId.stage = 6;
+                storage.userId.cause = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
 
             } else if(storage.userId.stage == '6') {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "「り災の状況がわかる写真」を添付してください。"
                 }));
+                storage.userId.stage = 7;
+                storage.userId.picture = event.message.text;
+                sessionStorage.setItem('storage',JSON.stringify(storage));
             
             } else if(storage.userId.stage == '7') {
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: "り災証明の申請が完了しました。\n申請内容を確認後、市役所の担当者よりご連絡します。\nしばらくお待ちください。"
                 }));
+                // セッションストレージの全てのデータを削除
+                sessionStorage.clear();
             }
         }        
         });
