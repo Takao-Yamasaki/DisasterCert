@@ -53,11 +53,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            userRef.child(userId).once('value',function(snapshot){
-                var userData = snapshot.val();
-            });
-            var stg = userData['stage'];
-            switch (stg) {
+            // userRef.child(userId).once('value',function(snapshot){
+            //     var userData = snapshot.val();
+            // });
+            // var stg = userData['stage'];
+            switch (storage.userId.stage) {
                 case null:
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, [{
