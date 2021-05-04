@@ -43,6 +43,43 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // }
             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
             if (event.type == "message" && event.message.type == "text"){
+                if(storageAvailable()){
+                    vents_processed.push(bot.replyMessage(event.replyToken, {
+                        type: "text",
+                        text: "localStorage使えるよ！ヽ(=´▽`=)ﾉ"
+                    }));
+                  }
+                  else{
+                    vents_processed.push(bot.replyMessage(event.replyToken, {
+                        type: "text",
+                        text: "localStorage使えないよ (´；ω；｀)"
+                    }));
+                  }
+                  
+                  
+                  /**
+                   * WebStorageが利用可能か判定する
+                   *
+                   * @param {string} type "localStorage" or "sessionStorage"
+                   * @return {boolean}
+                   */
+                  function storageAvailable(type="localStorage") {
+                    try {
+                      const storage = window[type];  // localStorage(sessionStorage)のオブジェクトを取得
+                      const x = '__storage_test__';  // 試験的に保存する値
+                  
+                      // 試験的にWebStorageを利用する
+                      storage.setItem(x, x);
+                      storage.removeItem(x);
+                  
+                      // 問題なく利用できればtrue
+                      return(true);
+                    }
+                    catch(e) {
+                      // 途中で何らかの例外が発生すればfalse
+                      return(false);
+                    }
+                  }
                 if (storage.userId.stage == 0){
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, [{
