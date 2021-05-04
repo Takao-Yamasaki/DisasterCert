@@ -74,7 +74,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     case 1: 
                         events_processed.push(bot.replyMessage(event.replyToken, {
                             type: "text",
-                            text: userData['stage'] 
+                            text: "あなたの住所を入力してください" + userData['stage'] 
                         }));
                         // storage.userId.stage = 2;
                         // userRef.child(userId).set({
