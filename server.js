@@ -53,7 +53,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            userRef.child(userId).once('value',function(snapshot){
+            userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
             });
             switch (storage.userId.stage) {
@@ -65,7 +65,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     },
                     {
                         type: "text",
-                        text: userData
+                        text: "あなたの「氏名」を入力してください。"
                     }])); 
                     storage.userId.stage = 1;
                     userRef.child(userId).set({
