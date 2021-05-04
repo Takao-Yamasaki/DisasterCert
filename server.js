@@ -65,7 +65,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     },
                     {
                         type: "text",
-                        text: "あなたの「氏名」を入力してください。"
+                        text: userData
                     }])); 
                     storage.userId.stage = 1;
                     userRef.child(userId).set({
