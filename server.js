@@ -34,16 +34,16 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         req.body.events.forEach((event) => {
             // ユーザーIDの取得
             var userId = event.source.userId;
-            var getData = JSON.parse(storage.getItem('storage'))
+            // var getData = JSON.parse(storage.getItem('storage'))
              // ユーザの情報を変数に格納
             // if (getData['stage'] == null) {
-            //     var storage = {
-            //         userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
-            //     };
+                var storage = {
+                    userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
+                };
             // }
             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
             if (event.type == "message" && event.message.type == "text"){
-                if (getData['stage'] == null){
+                if (storage.userId.stage == 0){
                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, [{
                         type: "text",
@@ -57,7 +57,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.name = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
-                } else if(getData['stage'] == '1') {
+                } else if(storage.userId.stage == 1) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "${getData['name']}さんの「住所」を入力してください。"
@@ -66,7 +66,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.address = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
-                } else if(getData['stage'] == '2') {
+                } else if(storage.userId.stage == 2) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災した物件」を入力してください・"
@@ -75,7 +75,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.housing = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
-                } else if(getData['stage'] == '3') {
+                } else if(storage.userId.stage == 3) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災した年月日」を入力してください。"
@@ -84,7 +84,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.date = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
-                } else if(getData['stage'] == '4') {
+                } else if(storage.userId.stage == 4) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災した物件の所在」を入力してください。"
@@ -93,7 +93,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.location = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
-                } else if(getData['stage'] == '5') {
+                } else if(storage.userId.stage == 5) {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災の原因」を入力してください。"
@@ -102,7 +102,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.cause = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
 
-                } else if(getData['stage'] == '6') {
+                } else if(storage.userId.stage == '6') {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "「り災の状況がわかる写真」を添付してください。"
@@ -111,11 +111,13 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     storage.userId.picture = event.message.text;
                     sessionStorage.setItem('storage',JSON.stringify(storage));
                 
-                } else if(getData['stage'] == '7') {
+                } else if(storage.userId.stage == '7') {
                     events_processed.push(bot.replyMessage(event.replyToken, {
                         type: "text",
                         text: "り災証明の申請が完了しました。\n申請内容を確認後、市役所の担当者よりご連絡します。\nしばらくお待ちください。"
                     }));
+                    // セッションストレージの全てのデータを削除
+                    sessionStorage.clear();
                 }
             }        
         });
