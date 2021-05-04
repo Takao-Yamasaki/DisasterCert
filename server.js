@@ -55,35 +55,35 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
+                switch (storage.userId.stage) {
+                    case 0:
+                        // replyMessage()で返信し、そのプロセスをevents_processedに追加。
+                        events_processed.push(bot.replyMessage(event.replyToken, [{
+                            type: "text",
+                            text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
+                        },
+                        {
+                            type: "text",
+                            text: userData
+                        }])); 
+                        storage.userId.stage = 1;
+                        userRef.child(userId).set({
+                            stage: 1
+                        });
+                        break;
+                    case 1: 
+                        events_processed.push(bot.replyMessage(event.replyToken, {
+                            type: "text",
+                            text: "あなたの「住所」を入力してください。" 
+                        }));
+                        // storage.userId.stage = 2;
+                        // userRef.child(userId).update({
+                        //     stage: 2,
+                        //     address: events.message.text
+                        // });
+                        break;
+                }
             });
-            switch (storage.userId.stage) {
-                case 0:
-                    // replyMessage()で返信し、そのプロセスをevents_processedに追加。
-                    events_processed.push(bot.replyMessage(event.replyToken, [{
-                        type: "text",
-                        text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
-                    },
-                    {
-                        type: "text",
-                        text: userData
-                    }])); 
-                    storage.userId.stage = 1;
-                    userRef.child(userId).set({
-                        stage: 1
-                    });
-                    break;
-                case 1: 
-                    events_processed.push(bot.replyMessage(event.replyToken, {
-                        type: "text",
-                        text: "あなたの「住所」を入力してください。" 
-                    }));
-                    // storage.userId.stage = 2;
-                    // userRef.child(userId).update({
-                    //     stage: 2,
-                    //     address: events.message.text
-                    // });
-                    break;
-            }
         }
     }); 
 
