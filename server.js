@@ -57,11 +57,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 var userData = snapshot.val();
                 if (userData == null) {
                     userRef.child(userId).set({
-                        stage: 0
+                        stage: 1
                     });
                 }
                 switch (userData['stage']) {
-                    case 0:
+                    case 1:
                         // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                         events_processed.push(bot.replyMessage(event.replyToken, [{
                             type: "text",
@@ -73,10 +73,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         }])); 
                         storage.userId.stage = 1;
                         userRef.child(userId).set({
-                            stage: 1
+                            stage: 2
                         });
                         break;
-                    case 1: 
+                    case 2: 
                         events_processed.push(bot.replyMessage(event.replyToken, {
                             type: "text",
                             text: "あなたの「住所」を入力してください" + userData['stage'] 
