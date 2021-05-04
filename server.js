@@ -46,103 +46,46 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     req.body.events.forEach((event) => {
         // ユーザーIDの取得
-        var userId = event.source.userId;
+        var userId = event.source.userId;    
         // ユーザの情報を変数に格納
         var storage = {
             userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
         };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            if (storage.userId.stage == 0){
-                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, [{
-                    type: "text",
-                    text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
-                },
-                {
-                    type: "text",
-                    text: "あなたの「氏名」を入力してください。"
-                }])); 
-                // stageを１に昇格
-                storage.userId.stage = 1;
-                // firebase
-                userRef.push({
-                    use: userId,
-                    stage: 1
-                });
+            switch (storage.userId.stage){
+                case 0:
+                    // replyMessage()で返信し、そのプロセスをevents_processedに追加。
+                    events_processed.push(bot.replyMessage(event.replyToken, [{
+                        type: "text",
+                        text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
+                    },
+                    {
+                        type: "text",
+                        text: "あなたの「氏名」を入力してください。"
+                    }])); 
+                    storage.userId.stage = 1;
+                    userRef.set({
+                        userId: {
+                        stage: 1
+                        }
+                    });
+                    break;
+                case 1:
+                    events_processed.push(bot.replyMessage(event.replyToken, {
+                        type: "text",
+                        text: "あなたの「住所」を入力してください。" 
+                    }));
+                    storage.userId.stage = 2;
+                    refMessageList.child(userId).update({
+                        stage: 2,
+                        address: events.message.text
+                    });
+                    break;
             }
         }
-    });    
+    }); 
 
-    req.body.events.forEach((event) => {
-        if (event.type == "message" && event.message.type == "text"){
-            if (storage.userId.stage == 1){
-                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: "あなたの「住所」を入力してください。"
-                }));
-                // firebase
-                userRef.push({
-                    use: userId,
-                    name: event.message.text;
-                    stage: 2
-                });
-            }
-        }
-    });
-        //     } else if(storage.userId.stage == 2) {
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: "「り災した物件」を入力してください・"
-        //         }));
-        //         storage.userId.stage = 3;
-        //         storage.userId.housing = event.message.text;
-        //         sessionStorage.setItem('storage',JSON.stringify(storage));
-
-        //     } else if(storage.userId.stage == 3) {
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: "「り災した年月日」を入力してください。"
-        //         }));
-        //         storage.userId.stage = 4;
-        //         storage.userId.date = event.message.text;
-        //         sessionStorage.setItem('storage',JSON.stringify(storage));
-
-        //     } else if(storage.userId.stage == 4) {
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: "「り災した物件の所在」を入力してください。"
-        //         }));
-        //         storage.userId.stage = 5;
-        //         storage.userId.location = event.message.text;
-        //         sessionStorage.setItem('storage',JSON.stringify(storage));
-
-        //     } else if(storage.userId.stage == 5) {
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: "「り災の原因」を入力してください。"
-        //         }));
-        //         storage.userId.stage = 6;
-        //         storage.userId.cause = event.message.text;
-        //         sessionStorage.setItem('storage',JSON.stringify(storage));
-
-        //     } else if(storage.userId.stage == '6') {
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: "「り災の状況がわかる写真」を添付してください。"
-        //         }));
-        //         storage.userId.stage = 7;
-        //         storage.userId.picture = event.message.text;
-        //         sessionStorage.setItem('storage',JSON.stringify(storage));
-            
-        //     } else if(storage.userId.stage == '7') {
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: "り災証明の申請が完了しました。\n申請内容を確認後、市役所の担当者よりご連絡します。\nしばらくお待ちください。"
-        //         }));
-        //     }
-        // }        
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
