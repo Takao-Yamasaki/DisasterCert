@@ -58,7 +58,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // });
             // var stg = userData['stage'];
             switch (storage.userId.stage) {
-                case null:
+                case 0:
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, [{
                         type: "text",
