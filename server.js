@@ -56,7 +56,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             userRef.child(userId).once('value',function(snapshot){
                 var userData = snapshot.val();
             });
-            var stg = userData['stage'];
             switch (storage.userId.stage) {
                 case 0:
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
@@ -66,7 +65,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     },
                     {
                         type: "text",
-                        text: stg
+                        text: userData['stage']
                     }])); 
                     storage.userId.stage = 1;
                     userRef.child(userId).set({
