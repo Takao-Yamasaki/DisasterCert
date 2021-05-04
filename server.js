@@ -64,7 +64,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         },
                         {
                             type: "text",
-                            text: "あなたの「氏名」を入力してください。\nstage:${userData['stage']}"
+                            text: "あなたの「氏名」を入力してください。${userData['stage']}"
                         }])); 
                         userRef.child(userId).set({
                             stage: 1
