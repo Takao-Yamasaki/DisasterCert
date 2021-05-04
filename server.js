@@ -64,7 +64,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         },
                         {
                             type: "text",
-                            text: userData
+                            text: userData['stage']
                         }])); 
                         storage.userId.stage = 1;
                         userRef.child(userId).set({
