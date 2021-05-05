@@ -47,10 +47,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
         // ユーザーIDの取得
         var userId = event.source.userId;    
-        // ユーザの情報を変数に格納
-        // var storage = {
-        //     userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
-        // };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
@@ -73,7 +69,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         type: "text",
                         text: "あなたの「氏名」を入力してください"
                     }])); 
-                    // storage.userId.stage = 1;
                     userRef.child(userId).set({
                         stage: 1
                     });
@@ -84,7 +79,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         //     type: "text",
                         //     text: "あなたの「住所」を入力してください" + userData['stage'] 
                         // }));
-                        // storage.userId.stage = 2;
                         // userRef.child(userId).set({
                         //     stage: 2,
                         // });
