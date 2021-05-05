@@ -55,15 +55,15 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
-                if (snapshot.exists()) {
+                // if (snapshot.exists()) {
                 
-                } else {
-                    userRef.child(userId).set({
-                        stage: 1
-                    });
-                }
+                // } else {
+                //     userRef.child(userId).set({
+                //         stage: 0
+                //     });
+                // }
                 switch (userData['stage']) {
-                    case 1:
+                    case 0:
                         // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                         events_processed.push(bot.replyMessage(event.replyToken, [{
                             type: "text",
@@ -71,14 +71,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         },
                         {
                             type: "text",
-                            text: "あなたの「氏名」を入力してください"
+                            text: "あなたの「氏名」を入力してください"  + userData['stage']
                         }])); 
                         // storage.userId.stage = 1;
                         userRef.child(userId).set({
-                            stage: 2
+                            stage: 1
                         });
                         break;
-                    case 2: 
+                    case 1: 
                         events_processed.push(bot.replyMessage(event.replyToken, {
                             type: "text",
                             text: "あなたの「住所」を入力してください" + userData['stage'] 
