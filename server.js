@@ -56,32 +56,30 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         stage: 0
                     });
                 }
-                // if (snapshot.exists()) {
-                // } else {
-                    // replyMessage()で返信し、そのプロセスをevents_processedに追加。
-                    events_processed.push(bot.replyMessage(event.replyToken, [{
-                        type: "text",
-                        text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
-                    },
-                    {
-                        type: "text",
-                        text: "あなたの「氏名」を入力してください"
-                    }])); 
-                    userRef.child(userId).set({
-                        stage: 1
-                    });
-                // };
-                switch (userData['stage']) {
-                    case 1: 
-                        events_processed.push(bot.replyMessage(event.replyToken, {
-                            type: "text",
-                            text: "あなたの「住所」を入力してください" + userData['stage'] 
-                        }));
-                        userRef.child(userId).set({
-                            stage: 2,
-                        });
-                        break;
-                }
+                // replyMessage()で返信し、そのプロセスをevents_processedに追加。
+                events_processed.push(bot.replyMessage(event.replyToken, [{
+                    type: "text",
+                    text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
+                },
+                {
+                    type: "text",
+                    text: "あなたの「氏名」を入力してください"
+                }])); 
+                userRef.child(userId).set({
+                    stage: 1
+                });
+
+                // switch (userData['stage']) {
+                //     case 1: 
+                //         events_processed.push(bot.replyMessage(event.replyToken, {
+                //             type: "text",
+                //             text: "あなたの「住所」を入力してください" + userData['stage'] 
+                //         }));
+                //         userRef.child(userId).set({
+                //             stage: 2,
+                //         });
+                //         break;
+                // }
             });
         }
     }); 
