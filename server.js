@@ -62,7 +62,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 //         stage: 0
                 //     });
                 // }
-                switch (userData['stage']) {
+                switch (storage.userId.stage) {
                     case 0:
                         // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                         events_processed.push(bot.replyMessage(event.replyToken, [{
@@ -73,7 +73,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             type: "text",
                             text: "あなたの「氏名」を入力してください"  + userData['stage']
                         }])); 
-                        // storage.userId.stage = 1;
+                        storage.userId.stage = 1;
                         userRef.child(userId).set({
                             stage: 1
                         });
@@ -83,7 +83,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             type: "text",
                             text: "あなたの「住所」を入力してください" + userData['stage'] 
                         }));
-                        // storage.userId.stage = 2;
+                        storage.userId.stage = 2;
                         // userRef.child(userId).update({
                         //     stage: 2,
                         //     name: events.message.text
