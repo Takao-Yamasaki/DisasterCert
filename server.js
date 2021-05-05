@@ -55,7 +55,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
-                if (snapshot.exists() == null) {
+                if (snapshot.exists()) {
+                
+                } else {
                     userRef.child(userId).set({
                         stage: 1
                     });
