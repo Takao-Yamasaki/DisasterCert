@@ -61,43 +61,44 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // ユーザーIDの取得
                 userId = event.source.userId;
                 userMsg = event.message.text;
-                flag = snapshot.exists();
                 // データの取得
                 userRef.child(userId).on('value',function(snapshot){
                     userData = snapshot.val();
                     // データが存在しなければ、ステージ０
                     if (snapshot.exists() == false) {
-                        userData['stage'] = 0;
+                        userRef.child(userId).update({
+                            stage: 0
+                        });
                     }
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // logger.debug(userData['stage']);
                     var msg;
                     switch (userData['stage']) {
                         case 0:
-                            msg = [
-                                    {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。"},
-                                    {type: "text",text: "あなたの「名前」を入力してください\nステージ:" + userData['stage']}
-                                ];        
-                            break;    
-                        case 1: 
+                            msg = {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。\n何かテキストを入力してください。"} ;       
+                            break;
+                        case 1:
+                            msg = {type: "text",text: "あなたの「名前」を入力してください\nステージ:" + userData['stage']};        
+                            break;
+                        case 2: 
                             msg = {type: "text",text: "あなたの「住所」を入力してください\nステージ:" + userData['stage']}; 
                             break;
-                        case 2:
+                        case 3:
                             msg = {type: "text",text: "「り災した物件」を入力してください\nステージ:" + userData['stage']}; 
                             break;
-                        case 3:
+                        case 4:
                             msg = {type: "text",text: "「り災した物件の所在」を入力してください\nステージ:" + userData['stage']};
                             break;
-                        case 4:
+                        case 5:
                             msg = {type: "text",text: "「り災した年月日」を入力してください\nステージ:" + userData['stage']};
                             break;
-                        case 5:
+                        case 6:
                             msg = {type: "text",text: "「り災した原因」を入力してください\nステージ:" + userData['stage']};
                             break;
-                        case 6:
+                        case 7:
                             msg = {type: "text",text: "「り災した状況の写真」を添付してください\nステージ:" + userData['stage']};
                             break;
-                        case 7:
+                        case 8:
                             msg = {type: "text",text: "申請が完了しました。申請内容を確認後、市役所の担当者よりご連絡します。しばらくお待ちください。\nステージ:" + userData['stage']};
                             break;
                     }
@@ -106,7 +107,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 });
             }
         }); 
-        if (userData['stage'] < 7) {
+        if (userData['stage'] < 8) {
             switch (userData['stage']) {
                 case 0:
                     userRef.child(userId).update({
@@ -115,41 +116,46 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     break;
                 case 1:
                     userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        name: userMsg
+                        stage: userData['stage'] + 1
                     });
-                break;
+                    break;
                 case 2:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
-                        address: userMsg
+                        name: userMsg
                     });
                 break;
                 case 3:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
-                        housing: userMsg
+                        address: userMsg
                     });
                 break;
                 case 4:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
-                        location: userMsg
+                        housing: userMsg
                     });
                 break;
                 case 5:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
-                        date: userMsg
+                        location: userMsg
                     });
                 break;
                 case 6:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
-                        cause: userMsg
+                        date: userMsg
                     });
                 break;
                 case 7:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        cause: userMsg
+                    });
+                break;
+                case 8:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         pic: userMsg
