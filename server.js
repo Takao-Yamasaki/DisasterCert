@@ -14,9 +14,9 @@ var ref = db.ref("protoout/studio");
 var userRef = ref.child("messageList");
 
 
-// var userId;
-// var userData;
-
+var userId;
+var userData;
+var userMsg; 
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 const server = require("express")();
@@ -58,6 +58,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             if (event.type == "message" && event.message.type == "text"){
                 // ユーザーIDの取得
                 userId = event.source.userId;
+                userMsg = event.message.text;
                 // データの取得
                 userRef.child(userId).on('value',function(snapshot){
                     userData = snapshot.val();
@@ -96,9 +97,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             msg = {type: "text",text: "「り災した状況の写真」を添付してください\nステージ:" + userData['stage']};
                             break;
                         case 7:
-                            msg = {type: "text",text: "「り災した状況の写真」を添付してください\nステージ:" + userData['stage']};
-                            break;
-                        case 8:
                             msg = {type: "text",text: "申請が完了しました。申請内容を確認後、市役所の担当者よりご連絡します。しばらくお待ちください。\nステージ:" + userData['stage']};
                             break;
                     }
@@ -107,16 +105,56 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 });
             }
         }); 
-        if (userData['stage'] <= 7) {
-            // switch (userData['stage']) {
-            //     case 0:
-            //     break;
-            //     case 1:
-                
-            // }
-            userRef.child(userId).update({
-                stage: userData['stage'] + 1
-            });
+        if (userData['stage'] < 7) {
+            switch (userData['stage']) {
+                case 0:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1
+                    });
+                    break;
+                case 1:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        name: userMsg
+                    });
+                break;
+                case 2:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        address: userMsg
+                    });
+                break;
+                case 3:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        housing: userMsg
+                    });
+                break;
+                case 4:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        location: userMsg
+                    });
+                break;
+                case 5:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        date: userMsg
+                    });
+                break;
+                case 6:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        cause: userMsg
+                    });
+                break;
+                case 7:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        pic: userMsg
+                    });
+                break;
+            }
         }
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
