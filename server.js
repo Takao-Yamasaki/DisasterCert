@@ -65,11 +65,15 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // データの取得
                 userRef.child(userId).on('value',function(snapshot){
                     userData = snapshot.val();
+                    // データが存在しなければ、ステージ０
+                    if (snapshot.exists() == false) {
+                        userData['stage'] = 0;
+                    }
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // logger.debug(userData['stage']);
                     var msg;
                     switch (userData['stage']) {
-                        case false:
+                        case 0:
                             msg = [
                                     {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。"},
                                     {type: "text",text: "あなたの「名前」を入力してください\nステージ:" + userData['stage']}
