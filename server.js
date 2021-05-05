@@ -62,15 +62,15 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // データの取得
                 userRef.child(userId).on('value',function(snapshot){
                     userData = snapshot.val();
-                    // データが存在しなければ、ステージ０
-                    // if (snapshot.exists() == false) {
-                    //     userRef.child(userId).set({
-                    //         stage: 0
+                    データが存在しなければ、ステージ０
+                    if (snapshot.exists() == false) {
+                        userRef.child(userId).set({
+                            stage: 0
                     //     });
-                        // var stg = 0;
+                    //     var stg = 0;
                     // } else {
-                        // var stg = userData['stage'];
-                    // }
+                    //     var stg = userData['stage'];
+                    }
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // logger.debug(userData['stage']);
                     var msg;
