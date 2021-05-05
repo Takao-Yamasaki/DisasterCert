@@ -66,7 +66,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     if (snapshot.exists() == false) {
                         userRef.child(userId).set({
                             stage: 0
-                    //     });
+                        });
                     //     var stg = 0;
                     // } else {
                     //     var stg = userData['stage'];
