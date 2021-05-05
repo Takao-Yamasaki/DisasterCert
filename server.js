@@ -75,21 +75,21 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }])); 
                     // storage.userId.stage = 1;
                     userRef.child(userId).set({
-                        stage: 2
+                        stage: 1
                     });
                 // };
-                // switch (userData['stage']) {
-                //     case 1: 
-                        // events_processed.push(bot.replyMessage(event.replyToken, {
-                        //     type: "text",
-                        //     text: "あなたの「住所」を入力してください" + userData['stage'] 
-                        // }));
+                switch (userData['stage']) {
+                    case 1: 
+                        events_processed.push(bot.replyMessage(event.replyToken, {
+                            type: "text",
+                            text: "あなたの「住所」を入力してください" + userData['stage'] 
+                        }));
                         // storage.userId.stage = 2;
-            //             userRef.child(userId).set({
-            //                 stage: 2,
-            //             });
-            //             break;
-            //     }
+                        userRef.child(userId).set({
+                            stage: 2,
+                        });
+                        break;
+                }
             });
         }
     }); 
