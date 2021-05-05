@@ -69,8 +69,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     stage: 1
                 });
 
-                switch (userData['stage']) {
-                    case 1: 
+                // switch (userData['stage']) {
+                //     case 1: 
                 //         events_processed.push(bot.replyMessage(event.replyToken, {
                 //             type: "text",
                 //             text: "あなたの「住所」を入力してください" + userData['stage'] 
@@ -78,8 +78,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         userRef.child(userId).set({
                             stage: 2,
                         });
-                        break;
-                }
+                //         break;
+                // }
             });
         }
     }); 
