@@ -107,7 +107,17 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 });
             }
         }); 
-
+        if (userData['stage'] <= 7) {
+            // switch (userData['stage']) {
+            //     case 0:
+            //     break;
+            //     case 1:
+                
+            // }
+            userRef.child(userId).update({
+                stage: userData['stage'] + 1
+            });
+        }
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
@@ -115,15 +125,3 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
     );
 });
-
-if (userData['stage'] <= 7) {
-    // switch (userData['stage']) {
-    //     case 0:
-    //     break;
-    //     case 1:
-        
-    // }
-    userRef.child(userId).update({
-        stage: userData['stage'] + 1
-    });
-}
