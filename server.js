@@ -78,28 +78,28 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             msg = {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。\n何かテキストを入力してください。"} ;       
                             break;
                         case 1:
-                            msg = {type: "text",text: "あなたの「名前」を入力してください\nステージ:" + userData['stage']};        
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「名前」を入力してください"};        
                             break;
                         case 2: 
-                            msg = {type: "text",text: "あなたの「住所」を入力してください\nステージ:" + userData['stage']}; 
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「住所」を入力してください"}; 
                             break;
                         case 3:
-                            msg = {type: "text",text: "「り災した物件」を入力してください\nステージ:" + userData['stage']}; 
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「り災した物件」を入力してください"}; 
                             break;
                         case 4:
-                            msg = {type: "text",text: "「り災した物件の所在」を入力してください\nステージ:" + userData['stage']};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「り災した物件の場所」を入力してください"};
                             break;
                         case 5:
-                            msg = {type: "text",text: "「り災した年月日」を入力してください\nステージ:" + userData['stage']};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「り災した年月日」を入力してください"};
                             break;
                         case 6:
-                            msg = {type: "text",text: "「り災した原因」を入力してください\nステージ:" + userData['stage']};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「り災の原因」を入力してください"};
                             break;
                         case 7:
-                            msg = {type: "text",text: "「り災した状況の写真」を添付してください\nステージ:" + userData['stage']};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n「り災の状況がわかる写真」を添付してください"};
                             break;
                         case 8:
-                            msg = {type: "text",text: "申請が完了しました。申請内容を確認後、市役所の担当者よりご連絡します。しばらくお待ちください。\nステージ:" + userData['stage']};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。申請内容を確認後、担当者より連絡します。しばらくお待ちください。"};
                             break;
                     }
                     // logger.debug(msg);
