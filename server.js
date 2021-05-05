@@ -80,10 +80,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // };
                 switch (userData['stage']) {
                     case 1: 
-                        // events_processed.push(bot.replyMessage(event.replyToken, {
-                        //     type: "text",
-                        //     text: "あなたの「住所」を入力してください" + userData['stage'] 
-                        // }));
+                        events_processed.push(bot.replyMessage(event.replyToken, {
+                            type: "text",
+                            text: "あなたの「住所」を入力してください" + userData['stage'] 
+                        }));
                         // storage.userId.stage = 2;
                         userRef.child(userId).set({
                             stage: 2,
