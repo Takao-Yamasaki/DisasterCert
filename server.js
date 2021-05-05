@@ -51,9 +51,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
-                if (snapshot.exists()) {
-                
-                } else {
+                if (snapshot.exists() == null) {
                     userRef.child(userId).set({
                         stage: 0
                     });
@@ -69,9 +67,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         type: "text",
                         text: "あなたの「氏名」を入力してください"
                     }])); 
-                    // userRef.child(userId).set({
-                    //     stage: 1
-                    // });
+                    userRef.child(userId).set({
+                        stage: 1
+                    });
                 // };
                 // switch (userData['stage']) {
                 //     case 1: 
