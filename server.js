@@ -65,14 +65,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // if (snapshot.exists()) {
                 // } else {
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
-                    events_processed.push(bot.replyMessage(event.replyToken, [{
-                        type: "text",
-                        text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
-                    },
-                    {
-                        type: "text",
-                        text: "あなたの「氏名」を入力してください"
-                    }])); 
+                    // events_processed.push(bot.replyMessage(event.replyToken, [{
+                    //     type: "text",
+                    //     text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
+                    // },
+                    // {
+                    //     type: "text",
+                    //     text: "あなたの「氏名」を入力してください"
+                    // }])); 
                     // storage.userId.stage = 1;
                     userRef.child(userId).set({
                         stage: 1
