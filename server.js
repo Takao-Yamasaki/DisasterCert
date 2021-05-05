@@ -75,7 +75,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }])); 
                     // storage.userId.stage = 1;
                     userRef.child(userId).set({
-                        stage: 1
+                        stage: 2
                     });
                 // };
                 // switch (userData['stage']) {
