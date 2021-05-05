@@ -13,6 +13,10 @@ var db = admin.database();
 var ref = db.ref("protoout/studio");
 var userRef = ref.child("messageList");
 
+
+// var userId;
+// var userData;
+
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 const server = require("express")();
@@ -26,8 +30,10 @@ logger.level = 'debug';
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
-    channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
-    channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
+    channelSecret: '35237451855259812007dc1a5c9df4d1',
+    channelAccessToken: 'ZR1Z6IQyR/vx8bUMCbn18QzBi5zOTPvpKgkdsFMklUIw4Se6cXYnAOEJQEKOfkdB+thbBG4NHi5TuxuQUbYZ1qWbV+wkcVrsl467RUh2r3cmAVg/a1xLaQxSg7PeilYN72INuDPNUcV0xl17LK+ePgdB04t89/1O/w1cDnyilFU='
+    // channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
+    // channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
 
 // -----------------------------------------------------------------------------
@@ -47,49 +53,64 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
-
-    req.body.events.forEach((event) => {
-        // ユーザーIDの取得
-        var userId = event.source.userId;    
-        // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-        if (event.type == "message" && event.message.type == "text"){
-            userRef.child(userId).on('value',function(snapshot){
-                var userData = snapshot.val();
-                if (snapshot.exists() == null) {
-                    userRef.child(userId).set({
-                        stage: 0
-                    });
-                }
-                // replyMessage()で返信し、そのプロセスをevents_processedに追加。
-                logger.debug(userData['stage']);
-                switch (userData['stage']) {
-                    case 0:
-                        events_processed.push(bot.replyMessage(event.replyToken, [{
-                            type: "text",
-                            text: "ようこそ！\nり災証明申請アプリです。\n申請を開始します。" 
-                        },
-                        {
-                            type: "text",
-                            text: "あなたの「氏名」を入力してください"
-                        }])); 
-                        userRef.child(userId).set({
-                            stage: 1
-                        });
-        
-                    case 1: 
-                        events_processed.push(bot.replyMessage(event.replyToken, {
-                            type: "text",
-                            text: "あなたの「住所」を入力してください" + userData['stage'] 
-                        }));
-                        userRef.child(userId).set({
-                            stage: 2
-                        });
-                        break;
-                    
-                }
-            });
-        }
-    }); 
+        req.body.events.forEach((event) => {
+            // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+            if (event.type == "message" && event.message.type == "text"){
+                // ユーザーIDの取得
+                userId = event.source.userId;
+                // データの取得
+                userRef.child(userId).on('value',function(snapshot){
+                    userData = snapshot.val();
+                    // データが存在しなければ、ステージ０
+                    // if (snapshot.exists() == false) {
+                    //     userRef.child(userId).set({
+                    //         stage: 0
+                    //     });
+                        // var stg = 0;
+                    // } else {
+                        // var stg = userData['stage'];
+                    // }
+                    // replyMessage()で返信し、そのプロセスをevents_processedに追加。
+                    // logger.debug(userData['stage']);
+                    var msg;
+                    switch (userData['stage']) {
+                        case 0:
+                            msg = {type: "text",text: "あなたの「名前」を入力してください\nステージ:" + userData['stage']};        
+                            break;    
+                        case 1: 
+                            msg = {type: "text",text: "あなたの「住所」を入力してください\nステージ:" + userData['stage']}; 
+                            break;
+                        case 2:
+                            msg = {type: "text",text: "「り災した物件」を入力してください\nステージ:" + userData['stage']}; 
+                            break;
+                        case 3:
+                            msg = {type: "text",text: "「り災した物件の所在」を入力してください\nステージ:" + userData['stage']};
+                            break;
+                        case 4:
+                            msg = {type: "text",text: "「り災した年月日」を入力してください\nステージ:" + userData['stage']};
+                            break;
+                        case 5:
+                            msg = {type: "text",text: "「り災した原因」を入力してください\nステージ:" + userData['stage']};
+                            break;
+                        case 6:
+                            msg = {type: "text",text: "「り災した状況の写真」を添付してください\nステージ:" + userData['stage']};
+                            break;
+                        case 7:
+                            msg = {type: "text",text: "「り災した状況の写真」を添付してください\nステージ:" + userData['stage']};
+                            break;
+                        case 8:
+                            msg = {type: "text",text: "申請が完了しました。申請内容を確認後、市役所の担当者よりご連絡します。しばらくお待ちください。\nステージ:" + userData['stage']};
+                            break;
+                    }
+                    logger.debug(msg);
+                    events_processed.push(bot.replyMessage(event.replyToken, msg));
+                });
+            }
+        }); 
+    
+    userRef.child(userId).update({
+        stage: userData['stage'] + 1
+    });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
