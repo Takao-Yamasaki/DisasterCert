@@ -62,7 +62,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 //         stage: 0
                 //     });
                 // }
-                if (snapshot.exists() == false) {
+                if (snapshot.exists()) {
+                } else {
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     events_processed.push(bot.replyMessage(event.replyToken, [{
                         type: "text",
