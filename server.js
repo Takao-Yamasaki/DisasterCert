@@ -17,6 +17,7 @@ var userRef = ref.child("messageList");
 var userId;
 var userData;
 var userMsg; 
+var flag;
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 const server = require("express")();
@@ -45,6 +46,7 @@ server.listen(process.env.PORT || 3000);
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config);
 
+
 // -----------------------------------------------------------------------------
 // ルーター設定
 server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
@@ -53,27 +55,21 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
-    // データの取得
-    userRef.child(userId).on('value',function(snapshot){
-        userData = snapshot.val();
-        // データが存在しなければ、ステージ０
-        if (snapshot.exists() == false) {
-            userRef.child(userId).set({
-                stage: 0
-            });
-        }
         req.body.events.forEach((event) => {
             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
             if (event.type == "message" && event.message.type == "text"){
                 // ユーザーIDの取得
                 userId = event.source.userId;
                 userMsg = event.message.text;
-                
+                flag = snapshot.exists();
+                // データの取得
+                userRef.child(userId).on('value',function(snapshot){
+                    userData = snapshot.val();
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // logger.debug(userData['stage']);
                     var msg;
                     switch (userData['stage']) {
-                        case 0:
+                        case false:
                             msg = [
                                     {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。"},
                                     {type: "text",text: "あなたの「名前」を入力してください\nステージ:" + userData['stage']}
@@ -103,10 +99,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                     // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
-                
+                });
             }
-        });
-    }); 
+        }); 
         if (userData['stage'] < 7) {
             switch (userData['stage']) {
                 case 0:
