@@ -90,7 +90,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             //             });
             //             break;
             //     }
-            // });
+            });
         }
     }); 
 
