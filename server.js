@@ -48,9 +48,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         // ユーザーIDの取得
         var userId = event.source.userId;    
         // ユーザの情報を変数に格納
-        // userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
-        //     var storage = {
-        // };
+        var storage = {
+            userId:{stage: 0, name: null, address: null, housing: null, date: null, location: null, cause: null ,picture: null}
+        };
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
