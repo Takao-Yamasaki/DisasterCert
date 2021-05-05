@@ -57,7 +57,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     userRef.child(userId).set({
                         stage: 0
                     });
-                // }
+                }
                 // if (snapshot.exists()) {
                 // } else {
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
