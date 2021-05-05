@@ -53,24 +53,22 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // すべてのイベント処理のプロセスを格納する配列。
     let events_processed = [];
+    // データの取得
+    userRef.child(userId).on('value',function(snapshot){
+        userData = snapshot.val();
+        // データが存在しなければ、ステージ０
+        if (snapshot.exists() == false) {
+            userRef.child(userId).set({
+                stage: 0
+            });
+        }
         req.body.events.forEach((event) => {
             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
             if (event.type == "message" && event.message.type == "text"){
                 // ユーザーIDの取得
                 userId = event.source.userId;
                 userMsg = event.message.text;
-                // データの取得
-                userRef.child(userId).on('value',function(snapshot){
-                    userData = snapshot.val();
-                    // データが存在しなければ、ステージ０
-                    if (snapshot.exists() == false) {
-                        userRef.child(userId).set({
-                            stage: 0
-                        });
-                    //     var stg = 0;
-                    // } else {
-                    //     var stg = userData['stage'];
-                    }
+                
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // logger.debug(userData['stage']);
                     var msg;
@@ -105,9 +103,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                     // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
-                });
+                
             }
-        }); 
+        });
+    }); 
         if (userData['stage'] < 7) {
             switch (userData['stage']) {
                 case 0:
