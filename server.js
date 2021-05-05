@@ -19,6 +19,10 @@ const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const { text } = require("express");
 
+const log4js = require('log4js')
+const logger = log4js.getLogger();
+logger.level = 'debug';
+
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -57,7 +61,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     });
                 }
                 // replyMessage()で返信し、そのプロセスをevents_processedに追加。
-                
+                logger.debug(userData['stage']);
                 switch (userData['stage']) {
                     case 0:
                         events_processed.push(bot.replyMessage(event.replyToken, [{
@@ -78,7 +82,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             text: "あなたの「住所」を入力してください" + userData['stage'] 
                         }));
                         userRef.child(userId).set({
-                            stage: 2,
+                            stage: 2
                         });
                         break;
                     
