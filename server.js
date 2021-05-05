@@ -62,8 +62,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 //         stage: 0
                 //     });
                 // }
-                if (snapshot.exists()) {
-                } else {
+                // if (snapshot.exists()) {
+                // } else {
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // events_processed.push(bot.replyMessage(event.replyToken, [{
                     //     type: "text",
@@ -74,10 +74,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     //     text: "あなたの「氏名」を入力してください"
                     // }])); 
                     // storage.userId.stage = 1;
-                    userRef.child(userId).set({
-                        stage: 1
-                    });
-                };
+                    // userRef.child(userId).set({
+                    //     stage: 1
+                    // });
+                // };
                 switch (userData['stage']) {
                     case 1: 
                         // events_processed.push(bot.replyMessage(event.replyToken, {
