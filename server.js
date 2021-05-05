@@ -55,11 +55,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             userRef.child(userId).on('value',function(snapshot){
                 var userData = snapshot.val();
-                if (userData == null) {
-                    userRef.child(userId).set({
-                        stage: 1
-                    });
-                }
+                // if (userData == null) {
+                //     userRef.child(userId).set({
+                //         stage: 1
+                //     });
+                // }
                 switch (userData['stage']) {
                     case 1:
                         // replyMessage()で返信し、そのプロセスをevents_processedに追加。
