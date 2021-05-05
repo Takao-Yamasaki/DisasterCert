@@ -102,15 +102,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             msg = {type: "text",text: "申請が完了しました。申請内容を確認後、市役所の担当者よりご連絡します。しばらくお待ちください。\nステージ:" + userData['stage']};
                             break;
                     }
-                    logger.debug(msg);
+                    // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
             }
         }); 
-    
-    userRef.child(userId).update({
-        stage: userData['stage'] + 1
-    });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
@@ -119,3 +115,15 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
     );
 });
+
+if (userData['stage'] <= 7) {
+    // switch (userData['stage']) {
+    //     case 0:
+    //     break;
+    //     case 1:
+        
+    // }
+    userRef.child(userId).update({
+        stage: userData['stage'] + 1
+    });
+}
