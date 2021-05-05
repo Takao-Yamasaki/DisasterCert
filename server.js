@@ -85,9 +85,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         //     text: "あなたの「住所」を入力してください" + userData['stage'] 
                         // }));
                         // storage.userId.stage = 2;
-                        // userRef.child(userId).set({
-                        //     stage: 2,
-                        // });
+                        userRef.child(userId).set({
+                            stage: 2,
+                        });
                         // break;
                 // }
             });
