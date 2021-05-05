@@ -62,7 +62,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // データの取得
                 userRef.child(userId).on('value',function(snapshot){
                     userData = snapshot.val();
-                    データが存在しなければ、ステージ０
+                    // データが存在しなければ、ステージ０
                     if (snapshot.exists() == false) {
                         userRef.child(userId).set({
                             stage: 0
