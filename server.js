@@ -96,129 +96,73 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「り災の原因」を入力してください"};
                             break;
                         case 7:
-                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n「り災の状況がわかる写真」を添付してください"};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n「り災の状況がわかる写真」を入力してください"};
                             break;
                         case 8:
-                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。申請内容を確認後、担当者より連絡します。しばらくお待ちください。"};
+                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
                             break;
                     }
-                    if (userData['stage'] < 8) {
-                        switch (userData['stage']) {
-                            case 0:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1
-                                });
-                                break;
-                            case 1:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1
-                                });
-                                break;
-                            case 2:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    name: userMsg
-                                });
-                            break;
-                            case 3:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    address: userMsg
-                                });
-                            break;
-                            case 4:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    housing: userMsg
-                                });
-                            break;
-                            case 5:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    location: userMsg
-                                });
-                            break;
-                            case 6:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    date: userMsg
-                                });
-                            break;
-                            case 7:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    cause: userMsg
-                                });
-                            break;
-                            case 8:
-                                userRef.child(userId).update({
-                                    stage: userData['stage'] + 1,
-                                    pic: userMsg
-                                });
-                            break;
-                        }
-                    }            
                     // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
             }
         }); 
-        // if (userData['stage'] < 8) {
-        //     switch (userData['stage']) {
-        //         case 0:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1
-        //             });
-        //             break;
-        //         case 1:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1
-        //             });
-        //             break;
-        //         case 2:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 name: userMsg
-        //             });
-        //         break;
-        //         case 3:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 address: userMsg
-        //             });
-        //         break;
-        //         case 4:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 housing: userMsg
-        //             });
-        //         break;
-        //         case 5:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 location: userMsg
-        //             });
-        //         break;
-        //         case 6:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 date: userMsg
-        //             });
-        //         break;
-        //         case 7:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 cause: userMsg
-        //             });
-        //         break;
-        //         case 8:
-        //             userRef.child(userId).update({
-        //                 stage: userData['stage'] + 1,
-        //                 pic: userMsg
-        //             });
-        //         break;
-        //     }
-        // }
+        if (userData['stage'] < 8) {
+            switch (userData['stage']) {
+                case 0:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1
+                    });
+                    break;
+                case 1:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1
+                    });
+                    break;
+                case 2:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        name: userMsg
+                    });
+                break;
+                case 3:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        address: userMsg
+                    });
+                break;
+                case 4:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        housing: userMsg
+                    });
+                break;
+                case 5:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        location: userMsg
+                    });
+                break;
+                case 6:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        date: userMsg
+                    });
+                break;
+                case 7:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        cause: userMsg
+                    });
+                break;
+                case 8:
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1,
+                        pic: userMsg
+                    });
+                break;
+            }
+        }
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
