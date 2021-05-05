@@ -84,7 +84,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             text: "あなたの「住所」を入力してください" + userData['stage'] 
                         }));
                         storage.userId.stage = 2;
-                        userRef.child(userId).set({
+                        userRef.child(userId).update({
                             stage: 2,
                             name: events.message.text
                         });
