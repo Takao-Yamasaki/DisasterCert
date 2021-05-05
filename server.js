@@ -86,7 +86,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         storage.userId.stage = 2;
                         userRef.child(userId).set({
                             stage: 2,
-                            name: events.message.text
                         },{marge: true});
                         break;
                 }
