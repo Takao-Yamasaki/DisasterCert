@@ -117,7 +117,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
                                 flag = 1;
                             } else {
-                                msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。"}
+                                msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。\n何か文字を入力してください。"}
                             }
                             break;
                     }
@@ -144,7 +144,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 msg = {
                         type: "text",
                         // text: userImg
-                        text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
+                        text: "【ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
                         "\n名前：" + userData['name'] +
                         "\n住所：" + userData['address'] +
                         "\nり災物件：" + userData['housing'] +
