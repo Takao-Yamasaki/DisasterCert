@@ -127,15 +127,13 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             } else if(event.message.type == "image" && userData['stage'] == 8) {
                 // logger.debug(msg);
                 // userImg = event.message.previewImageUrl;
-                // var storageRef = firebase.storage().ref();
+                var storageRef = firebase.storage().ref();
                 // const dest = fs.createWriteStream('${bucket}/out/test.jpg');
-                const file = '${bucket}/out/test.jpg'
+                // const file = '${bucket}/out/test.jpg'
                 bot.getMessageContent(event.message.id)
                     .then((stream) => {
                     stream.on('data', (chunk) => {
-                        ref.put(file).then(function(snapshot) {
-                        //   console.log('Uploaded a blob or file!');
-                        });
+                        storageRef.child('images/test.jpg').put(stream());
                     });
                     stream.on('error', (err) => {
                     // error handling
