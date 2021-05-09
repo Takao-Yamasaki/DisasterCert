@@ -18,6 +18,8 @@ var userId;
 var userData;
 var userMsg; 
 var flag;
+// リプライメッセージの格納
+var msg;
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 const server = require("express")();
@@ -72,7 +74,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
                     // logger.debug(userData['stage']);
-                    var msg;
                     switch (userData['stage']) {
                         case 0:
                             msg = {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。\n何かテキストを入力してください。"} ;       
@@ -122,7 +123,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     // logger.debug(msg);
                     // events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
-            } else if(event.message.type == "image" && user['stage'] == 8) {
+            } else if(event.message.type == "image" && userData['stage'] == 8) {
                 userImg = event.message.originalContentUrl
                 msg = {
                         type: "text",
@@ -135,7 +136,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         "\nり災した原因：" + userData['cause']
                     };
             }
-            logger.debug(msg);
+            // logger.debug(msg);
             events_processed.push(bot.replyMessage(event.replyToken, msg));
         }); 
         if (userData['stage'] < 10) {
