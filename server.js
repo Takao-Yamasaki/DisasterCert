@@ -118,7 +118,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 });    
             }
         }); 
-        if (userData['stage'] < 8) {
+        if (userData['stage'] < 9) {
             switch (userData['stage']) {
                 case 0:
                     userRef.child(userId).update({
