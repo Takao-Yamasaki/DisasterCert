@@ -206,8 +206,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     break;
                 case 8:
                     userRef.child(userId).update({
-                        stage: userData['stage'] + 1
-                        // pic: userImg
+                        stage: userData['stage'] + 1,
+                        pic: userImg
                     });
                     break;
                 case 9:
