@@ -126,7 +126,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             } else if(event.message.type == "image" && userData['stage'] == 8) {
                 // logger.debug(msg);
                 // userImg = event.message.previewImageUrl;
-                var storageRef = firebase.storage().ref("gs://disaster-cert.appspot.com/");
+                var storageRef = firebase.storage().ref("https://console.firebase.google.com/project/disaster-cert/storage/disaster-cert.appspot.com/files");
                 const dest = fs.createWriteStream('${storageRef}/out/test.jpg', 'binary');
                 client.getMessageContent(event.message.id)
                     .then((stream) => {
