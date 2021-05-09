@@ -101,25 +101,31 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         case 8:
                             msg = {
                                     type: "text",
-                                    text: "入力内容は次のとおりでよろしいでしょうか。" +
-                                    userData['name'] +
-                                    userData['address'] +
-                                    userData['housing'] +
-                                    userData['location'] +
-                                    userData['date'] +
-                                    userData['cause']
+                                    text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。\nよろしければ、「はい」と入力してください。" +
+                                    "\n名前：" + userData['name'] +
+                                    "\n住所：" + userData['address'] +
+                                    "\nり災物件：" + userData['housing'] +
+                                    "\nり災場所：" + userData['location'] +
+                                    "\nり災した年月日：" + userData['date'] +
+                                    "\nり災した原因：" + userData['cause']
                                 };
                             break;
                         case 9:
-                            msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
-                            break;
+                            if (event.message.text == "はい") {
+                                msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
+                                flag = 1;
+                                break;
+                            } else {
+                                msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。"}
+                                break;
+                            }
                     }
                     // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });    
             }
         }); 
-        if (userData['stage'] < 9) {
+        if (userData['stage'] < 10) {
             switch (userData['stage']) {
                 case 0:
                     userRef.child(userId).update({
@@ -136,43 +142,54 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         stage: userData['stage'] + 1,
                         name: userMsg
                     });
-                break;
+                    break;
                 case 3:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         address: userMsg
                     });
-                break;
+                    break;
                 case 4:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         housing: userMsg
                     });
-                break;
+                    break;
                 case 5:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         location: userMsg
                     });
-                break;
+                    break;
                 case 6:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         date: userMsg
                     });
-                break;
+                    break;
                 case 7:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         cause: userMsg
                     });
-                break;
+                    break;
                 case 8:
                     userRef.child(userId).update({
                         stage: userData['stage'] + 1,
                         pic: userMsg
                     });
-                break;
+                    break;
+                case 9:
+                    if (flag == 1) {
+                        userRef.child(userId).update({
+                            stage: userData['stage'] + 1
+                        });
+                    } else {
+                        userRef.child(userId).update({
+                            stage: 0
+                        });
+                    }
+                    break;
             }
         }
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
