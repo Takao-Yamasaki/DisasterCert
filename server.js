@@ -108,7 +108,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                     userData['location'] +
                                     userData['date'] +
                                     userData['cause']
-                                }
+                                };
+                            break;
                         case 9:
                             msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
                             break;
