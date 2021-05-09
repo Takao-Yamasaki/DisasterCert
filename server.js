@@ -127,13 +127,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 userImg = event.message.originalContentUrl
                 msg = {
                         type: "text",
-                        text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
-                        "\n名前：" + userData['name'] +
-                        "\n住所：" + userData['address'] +
-                        "\nり災物件：" + userData['housing'] +
-                        "\nり災場所：" + userData['location'] +
-                        "\nり災した年月日：" + userData['date'] +
-                        "\nり災した原因：" + userData['cause']
+                        text: event.message.originalContentUrl
+                        // text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
+                        // "\n名前：" + userData['name'] +
+                        // "\n住所：" + userData['address'] +
+                        // "\nり災物件：" + userData['housing'] +
+                        // "\nり災場所：" + userData['location'] +
+                        // "\nり災した年月日：" + userData['date'] +
+                        // "\nり災した原因：" + userData['cause']
                     };
             }
             // logger.debug(msg);
