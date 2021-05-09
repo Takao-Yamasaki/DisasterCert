@@ -98,7 +98,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         case 7:
                             msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n「り災の状況がわかる写真」を入力してください"};
                             break;
-                        // case 8:
+                        case 8:
                         //     msg = {
                         //             type: "text",
                         //             text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
@@ -109,7 +109,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         //             "\nり災した年月日：" + userData['date'] +
                         //             "\nり災した原因：" + userData['cause']
                         //         };
-                        //     break;
+                            break;
                         case 9:
                             if (event.message.text == "はい") {
                                 msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
