@@ -127,7 +127,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // logger.debug(msg);
                 // userImg = event.message.previewImageUrl;
                 const dest = fs.createWriteStream('./out/test.jpg', 'binary');
-                client.getMessageContent(evennt.message.id)
+                client.getMessageContent(event.message.id)
                     .then((stream) => {
                     stream.on('data', (chunk) => {
                       stream.pipe(dest);
