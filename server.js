@@ -126,7 +126,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             } else if(event.message.type == "image" && userData['stage'] == 8) {
                 // logger.debug(msg);
                 // userImg = event.message.previewImageUrl;
-                const dest = fs.createWriteStream('./out/test.jpg', 'binary');
+                var storageRef = firebase.storage().ref();
+                const dest = fs.createWriteStream('${storageRef}/out/test.jpg', 'binary');
                 client.getMessageContent(event.message.id)
                     .then((stream) => {
                     stream.on('data', (chunk) => {
