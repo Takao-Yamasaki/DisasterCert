@@ -101,7 +101,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         case 8:
                             msg = {
                                     type: "text",
-                                    text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。\nよろしければ、「はい」と入力してください。" +
+                                    text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
                                     "\n名前：" + userData['name'] +
                                     "\n住所：" + userData['address'] +
                                     "\nり災物件：" + userData['housing'] +
@@ -183,12 +183,13 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         userRef.child(userId).update({
                             stage: userData['stage'] + 1
                         });
+                        break;
                     } else {
                         userRef.child(userId).update({
                             stage: 0
                         });
+                        break;
                     }
-                    break;
             }
         }
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
