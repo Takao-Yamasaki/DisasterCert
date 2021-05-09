@@ -125,17 +125,27 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 });
             } else if(event.message.type == "image" && userData['stage'] == 8) {
                 // logger.debug(msg);
-                userImg = event.originalContentUrl;
+                // userImg = event.message.previewImageUrl;
+                const dest = fs.createWriteStream('./out/test.jpg', 'binary');
+                client.getMessageContent(evennt.message.id)
+                    .then((stream) => {
+                    stream.on('data', (chunk) => {
+                      stream.pipe(dest);
+                    });
+                    stream.on('error', (err) => {
+                    // error handling
+                    });
+                });
                 msg = {
                         type: "text",
-                        text: userImg
-                        // text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
-                        // "\n名前：" + userData['name'] +
-                        // "\n住所：" + userData['address'] +
-                        // "\nり災物件：" + userData['housing'] +
-                        // "\nり災場所：" + userData['location'] +
-                        // "\nり災した年月日：" + userData['date'] +
-                        // "\nり災した原因：" + userData['cause']
+                        // text: userImg
+                        text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
+                        "\n名前：" + userData['name'] +
+                        "\n住所：" + userData['address'] +
+                        "\nり災物件：" + userData['housing'] +
+                        "\nり災場所：" + userData['location'] +
+                        "\nり災した年月日：" + userData['date'] +
+                        "\nり災した原因：" + userData['cause']
                     };
             }
             
