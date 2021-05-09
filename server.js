@@ -129,7 +129,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // userImg = event.message.previewImageUrl;
                 // var storageRef = firebase.storage().ref();
                 const dest = fs.createWriteStream('${bucket}/out/test.jpg', 'binary');
-                client.getMessageContent(event.message.id)
+                bot.getMessageContent(event.message.id)
                     .then((stream) => {
                     stream.on('data', (chunk) => {
                       stream.pipe(dest);
