@@ -123,7 +123,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
-            } else if(event.type == "message" && user['stage'] == 8) {
+            } else if(event.type == "image" && user['stage'] == 8) {
                 msg = {
                         type: "text",
                         text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
