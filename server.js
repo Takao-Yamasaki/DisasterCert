@@ -116,7 +116,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 flag = 1;
                                 break;
                             } else {
-                                msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。"}
+                                msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。\n何かテキストを入力してください。"}
                                 break;
                             }
                     }
