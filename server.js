@@ -185,10 +185,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     });
                     break;
                 case 8:
-                    // userRef.child(userId).update({
-                    //     stage: userData['stage'] + 1,
+                    userRef.child(userId).update({
+                        stage: userData['stage'] + 1
                     //     pic: userMsg
-                    // });
+                    });
                     break;
                 case 9:
                     if (flag == 1) {
