@@ -113,7 +113,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         case 9:
                             if (event.message.text == "はい") {
                                 msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
-                                flag = 1;
                                 break;
                             } else {
                                 msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。"}
@@ -180,7 +179,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     });
                     break;
                 case 9:
-                    if (flag == 1) {
+                    if (event.message.text == "はい") {
                         userRef.child(userId).update({
                             stage: userData['stage'] + 1
                         });
