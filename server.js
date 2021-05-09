@@ -6,13 +6,14 @@ var serviceAccount = require("./serviceAccountKey.json");
 // SDKを初期化
 admin.initializeApp ({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://disaster-cert-default-rtdb.firebaseio.com/"
+    databaseURL: "https://disaster-cert-default-rtdb.firebaseio.com/",
+    storageBucket: "disaster-cert.appspot.com"
 });
 
 var db = admin.database();
 var ref = db.ref("protoout/studio");
 var userRef = ref.child("messageList");
-
+var bucket = admin.storage().bucket();
 
 var userId;
 var userData;
@@ -126,8 +127,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             } else if(event.message.type == "image" && userData['stage'] == 8) {
                 // logger.debug(msg);
                 // userImg = event.message.previewImageUrl;
-                var storageRef = firebase.storage().ref("https://console.firebase.google.com/project/disaster-cert/storage/disaster-cert.appspot.com/files");
-                const dest = fs.createWriteStream('${storageRef}/out/test.jpg', 'binary');
+                // var storageRef = firebase.storage().ref();
+                const dest = fs.createWriteStream('${bucket}/out/test.jpg', 'binary');
                 client.getMessageContent(event.message.id)
                     .then((stream) => {
                     stream.on('data', (chunk) => {
