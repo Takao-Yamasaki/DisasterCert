@@ -185,9 +185,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         });
                         break;
                     } else {
-                        userRef.child(userId).update({
-                            stage: 0
-                        });
+                        userRef.child(userId).remove();
                         break;
                     }
             }
