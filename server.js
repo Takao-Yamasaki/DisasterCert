@@ -124,8 +124,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     // events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
             } else if(event.message.type == "image" && userData['stage'] == 8) {
-                logger.debug(msg);
-                userImg = event.message.originalContentUrl;
+                // logger.debug(msg);
+                userImg = event.originalContentUrl;
                 msg = {
                         type: "text",
                         text: userImg
