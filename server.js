@@ -122,8 +122,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     // logger.debug(msg);
                     // events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
-            } else if(event.type == "image" && user['stage'] == 8) {
-                userImg = event.originalContentUrl
+            } else if(event.message.type == "image" && user['stage'] == 8) {
+                userImg = event.message.originalContentUrl
                 msg = {
                         type: "text",
                         text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
@@ -135,6 +135,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         "\nり災した原因：" + userData['cause']
                     };
             }
+            logger.debug(msg);
             events_processed.push(bot.replyMessage(event.replyToken, msg));
         }); 
         if (userData['stage'] < 10) {
