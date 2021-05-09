@@ -114,11 +114,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             if (event.message.text == "はい") {
                                 msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n申請が完了しました。内容確認後、担当者より連絡があります。しばらくお待ちください。"};
                                 flag = 1;
-                                break;
                             } else {
                                 msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\n入力をはじめから行います。"}
-                                break;
                             }
+                            break;
                     }
                     // logger.debug(msg);
                     events_processed.push(bot.replyMessage(event.replyToken, msg));
