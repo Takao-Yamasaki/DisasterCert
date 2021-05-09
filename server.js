@@ -120,10 +120,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             break;
                     }
                     // logger.debug(msg);
-                    events_processed.push(bot.replyMessage(event.replyToken, msg));
+                    // events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
             } else if(event.type == "image" && user['stage'] == 8) {
-                
+                userImg = event.originalContentUrl
                 msg = {
                         type: "text",
                         text: "ステージ:" + userData['stage']+ "】\n入力内容は次のとおりでよろしいでしょうか。よろしければ、「はい」と入力してください。" +
@@ -134,8 +134,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         "\nり災した年月日：" + userData['date'] +
                         "\nり災した原因：" + userData['cause']
                     };
-                events_processed.push(bot.replyMessage(event.replyToken, msg));
             }
+            events_processed.push(bot.replyMessage(event.replyToken, msg));
         }); 
         if (userData['stage'] < 10) {
             switch (userData['stage']) {
@@ -187,8 +187,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     break;
                 case 8:
                     userRef.child(userId).update({
-                        stage: userData['stage'] + 1
-                    //     pic: userMsg
+                        stage: userData['stage'] + 1,
+                        pic: userImg
                     });
                     break;
                 case 9:
