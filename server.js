@@ -10,13 +10,30 @@ admin.initializeApp ({
     storageBucket: "disaster-cert.appspot.com"
 });
 
+const {uuid} = require("uuidv4");
+
 var db = admin.database();
 var ref = db.ref("protoout/studio");
 var userRef = ref.child("messageList");
 var bucket = admin.storage().bucket();
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+const tempDir = os.tmpdir()
+
+//ダウンロード関数
+function downloadContent(messageId, downloadPath) {
+    return bot.getMessageContent(messageId)
+      .then((stream) => new Promise((resolve, reject) => {
+        const writable = fs.createWriteStream(downloadPath);
+        stream.pipe(writable);
+        stream.on('end', () => resolve(downloadPath));
+        stream.on('error', reject);
+      }));
+  }
 
 var userId;
-var userData;
+var userData = 1;
 var userMsg; 
 var flag;
 // リプライメッセージの格納
@@ -34,10 +51,10 @@ logger.level = 'debug';
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
-    channelSecret: '35237451855259812007dc1a5c9df4d1',
-    channelAccessToken: 'ZR1Z6IQyR/vx8bUMCbn18QzBi5zOTPvpKgkdsFMklUIw4Se6cXYnAOEJQEKOfkdB+thbBG4NHi5TuxuQUbYZ1qWbV+wkcVrsl467RUh2r3cmAVg/a1xLaQxSg7PeilYN72INuDPNUcV0xl17LK+ePgdB04t89/1O/w1cDnyilFU='
-    // channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
-    // channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
+    // channelSecret: '',
+    // channelAccessToken: ''
+    channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
+    channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
 
 // -----------------------------------------------------------------------------
@@ -65,8 +82,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 userId = event.source.userId;
                 userMsg = event.message.text;
                 // データの取得
-                userRef.child(userId).on('value',function(snapshot){
+                userRef.child(userId).once('value',function(snapshot){
+                    // logger.debug(global.userData);
                     userData = snapshot.val();
+                    logger.debug(userData);
                     // データが存在しなければ、ステージ０
                     if (snapshot.exists() == false) {
                         userRef.child(userId).update({
@@ -74,10 +93,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         });
                     }
                     // replyMessage()で返信し、そのプロセスをevents_processedに追加。
-                    // logger.debug(userData['stage']);
+                    logger.debug(userData['stage']);
                     switch (userData['stage']) {
                         case 0:
                             msg = {type: "text",text: "こんにちは！\nり災証明書申請アプリです。\n申請を開始します。\n何かテキストを入力してください。"} ;       
+                            logger.debug(msg);
                             break;
                         case 1:
                             msg = {type: "text",text: "【ステージ:" + userData['stage']+ "】\nあなたの「名前」を入力してください"};        
@@ -121,24 +141,88 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             }
                             break;
                     }
-                    // logger.debug(msg);
+                    if (userData['stage'] < 10) {
+                        switch (userData['stage']) {
+                            case 0:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1
+                                });
+                                break;
+                            case 1:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1
+                                });
+                                break;
+                            case 2:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1,
+                                    name: userMsg
+                                });
+                                break;
+                            case 3:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1,
+                                    address: userMsg
+                                });
+                                break;
+                            case 4:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1,
+                                    housing: userMsg
+                                });
+                                break;
+                            case 5:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1,
+                                    location: userMsg
+                                });
+                                break;
+                            case 6:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1,
+                                    date: userMsg
+                                });
+                                break;
+                            case 7:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1,
+                                    cause: userMsg
+                                });
+                                break;
+                            case 8:
+                                userRef.child(userId).update({
+                                    stage: userData['stage'] + 1
+                                    // pic: userImg
+                                });
+                                break;
+                            case 9:
+                                if (flag == 1) {
+                                    userRef.child(userId).update({
+                                        stage: userData['stage'] + 1
+                                    });
+                                    break;
+                                } else {
+                                    userRef.child(userId).remove();
+                                    break;
+                                }
+                        }
+                    }
+                    logger.debug(msg);
+                    events_processed.push(bot.replyMessage(event.replyToken, msg));
+                    
                     // events_processed.push(bot.replyMessage(event.replyToken, msg));
                 });
-            } else if(event.message.type == "image" && userData['stage'] == 8) {
-                // logger.debug(msg);
-                // userImg = event.message.previewImageUrl;
-                // var storageRef = firebase.storage().ref();
-                // const dest = fs.createWriteStream('${bucket}/out/test.jpg');
-                // const file = '${bucket}/out/test.jpg'
-                bot.getMessageContent(event.message.id)
-                    .then((stream) => {
-                    stream.on('data', (chunk) => {
-                        bot.put(bucket.child('images/test.jpg')).then(function(snapshot) {
-                            
-                        });
-                    });
-                    stream.on('error', (err) => {
-                    // error handling
+            } else if(event.message.type == "image") {
+                userRef.child(userId).once('value',function(snapshot){
+                    userData = snapshot.val();
+                    logger.debug(bucket);
+                    // if文を入れる
+                    const id = uuid();
+                    downloadContent(event.message.id, path.join(tempDir, `${userId}.jpg`))
+                    bucket.upload(path.join(tempDir, `${userId}.jpg`),{public: true },function(err, file, apiResponse){
+                        logger.debug(err);
+                        logger.debug(file);
+                        logger.debug(apiResponse);
                     });
                 });
                 msg = {
@@ -152,76 +236,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         "\nり災した年月日：" + userData['date'] +
                         "\nり災した原因：" + userData['cause']
                     };
+                logger.debug(msg);
+                events_processed.push(bot.replyMessage(event.replyToken, msg)); 
+                 
             }
             
-            events_processed.push(bot.replyMessage(event.replyToken, msg));
+            
         }); 
-        if (userData['stage'] < 10) {
-            switch (userData['stage']) {
-                case 0:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1
-                    });
-                    break;
-                case 1:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1
-                    });
-                    break;
-                case 2:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        name: userMsg
-                    });
-                    break;
-                case 3:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        address: userMsg
-                    });
-                    break;
-                case 4:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        housing: userMsg
-                    });
-                    break;
-                case 5:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        location: userMsg
-                    });
-                    break;
-                case 6:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        date: userMsg
-                    });
-                    break;
-                case 7:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1,
-                        cause: userMsg
-                    });
-                    break;
-                case 8:
-                    userRef.child(userId).update({
-                        stage: userData['stage'] + 1
-                        // pic: userImg
-                    });
-                    break;
-                case 9:
-                    if (flag == 1) {
-                        userRef.child(userId).update({
-                            stage: userData['stage'] + 1
-                        });
-                        break;
-                    } else {
-                        userRef.child(userId).remove();
-                        break;
-                    }
-            }
-        }
+        
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
